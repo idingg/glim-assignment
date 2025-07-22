@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include <random>
+#include <ctime>
 
 
 // CGlimAssignmentDlg 대화 상자
@@ -14,10 +16,14 @@ private:
 	CPoint m_point[3] = { {-1, -1}, {-1, -1}, {-1, -1} };
 	CImage m_image;
 	int m_nWndWidthMin = 655;
-	int m_nWndHeightMin = 600;
+	int m_nWndHeightMin = 570;
 	int m_nClickedPointIdx = -1;
 	int m_nPointRadius = 10;
 	int m_nThickness = 1;
+
+	HANDLE m_hThread = NULL; // 스레드 핸들
+	CWinThread* m_pThread = NULL; // 스레드 객체
+	static UINT ThreadRandomMove(LPVOID pParam); // 스레드 함수
 
 	// 생성입니다.
 public:
@@ -36,18 +42,6 @@ protected:
 private:
 	void InitPoints();
 	void InitImage();
-
-protected:
-	HICON m_hIcon;
-
-
-	// 생성된 메시지 맵 함수
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
-	afx_msg void OnPaint();
-	afx_msg HCURSOR OnQueryDragIcon();
-	DECLARE_MESSAGE_MAP()
-
 	int GetPointCnt();
 	bool IsValidPos(CPoint point);
 	void SetValidPixel(CPoint point, COLORREF color);
@@ -59,6 +53,16 @@ protected:
 	int GetClosestPointIdx(CPoint point, int radius);
 	void InitCtrlPos();
 	void OnPointSelected(CPoint point, int nClickedPointIdx);
+
+protected:
+	HICON m_hIcon;
+
+	// 생성된 메시지 맵 함수
+	virtual BOOL OnInitDialog();
+	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+	afx_msg void OnPaint();
+	afx_msg HCURSOR OnQueryDragIcon();
+	DECLARE_MESSAGE_MAP()
 
 public:
 	afx_msg void OnBnClickedButtonReset();

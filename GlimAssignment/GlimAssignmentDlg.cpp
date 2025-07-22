@@ -6,6 +6,8 @@
 #include "framework.h"
 #include "GlimAssignment.h"
 #include "GlimAssignmentDlg.h"
+#include <chrono>
+#include <thread>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -84,8 +86,11 @@ void CGlimAssignmentDlg::InitPoints()
 void CGlimAssignmentDlg::InitImage()
 {
 	// 이미지 초기화
-	m_image.Destroy(); // 기존 이미지 삭제
-	m_image.Create(640, 480, 24); // 640x480 크기의 24비트 이미지 생성
+	if (m_image.IsNull())
+	{
+		m_image.Destroy(); // 기존 이미지 삭제
+		m_image.Create(640, 480, 24); // 640x480 크기의 24비트 이미지 생성
+	}
 
 	// 이미지를 흰색으로 채웁니다.
 	HDC hdc = m_image.GetDC();
@@ -419,8 +424,61 @@ void CGlimAssignmentDlg::OnBnClickedButtonReset()
 
 void CGlimAssignmentDlg::OnBnClickedButtonRndMv()
 {
+	if (m_pThread == NULL)
+	{
+		m_pThread = AfxBeginThread(ThreadRandomMove, this);
+		if (m_pThread == NULL)
+		{
+			AfxMessageBox(_T("스레드를 생성할 수 없습니다."));
+		}
+		else
+		{
+			m_hThread = m_pThread->m_hThread;
 
-	//AfxMessageBox(_T("Random Move button clicked!"));
+			// 버튼 비활성화
+			CWnd* pBtnRndMv = GetDlgItem(IDC_BTN_RND_MV);
+			if (pBtnRndMv)
+				pBtnRndMv->EnableWindow(FALSE);
+		}
+	}
+	else
+	{
+		AfxMessageBox(_T("이미 스레드가 실행 중입니다."));
+	}
+}
+
+UINT CGlimAssignmentDlg::ThreadRandomMove(LPVOID pParam)
+{
+	CGlimAssignmentDlg* pDlg = (CGlimAssignmentDlg*)pParam;
+
+	srand((unsigned int)time(NULL));
+
+	for (int i = 0; i < 10; i++)
+	{
+		std::chrono::steady_clock::time_point start = std::chrono::high_resolution_clock::now();
+		// 3개의 점 위치를 랜덤하게 변경
+		for (int j = 0; j < 3; j++)
+		{
+			pDlg->m_point[j].x = rand() % pDlg->m_image.GetWidth();
+			pDlg->m_point[j].y = rand() % pDlg->m_image.GetHeight();
+		}
+
+		pDlg->PaintImage();
+
+		// 시작한지 500ms가 될 때까지 루프
+		std::chrono::steady_clock::time_point now = std::chrono::high_resolution_clock::now();
+		while (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() < 500)
+			now = std::chrono::high_resolution_clock::now();
+	}
+
+	pDlg->m_pThread = NULL; // 스레드 종료 후 포인터 초기화
+
+	// 버튼 활성화
+	CWnd* pBtnRndMv = pDlg->GetDlgItem(IDC_BTN_RND_MV);
+	if (pBtnRndMv)
+		pBtnRndMv->EnableWindow(TRUE);
+
+	return 0;
 }
 
 void CGlimAssignmentDlg::InitCtrlPos()
