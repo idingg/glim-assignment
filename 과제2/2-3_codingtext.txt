@@ -1,0 +1,28 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(vector<vector<int>> dots)
+{
+	int answer = 0;
+
+	vector<int> ptBottumLeft = {256, 256};
+	vector<int> PtTopRight = {-256, -256};
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (ptBottumLeft[0] > dots[i][0])
+			ptBottumLeft[0] = dots[i][0];
+		if (ptBottumLeft[1] > dots[i][1])
+			ptBottumLeft[1] = dots[i][1];
+		if (PtTopRight[0] < dots[i][0])
+			PtTopRight[0] = dots[i][0];
+		if (PtTopRight[1] < dots[i][1])
+			PtTopRight[1] = dots[i][1];
+	}
+
+	answer = (PtTopRight[0] - ptBottumLeft[0]) * (PtTopRight[1] - ptBottumLeft[1]);
+
+	return answer;
+}
