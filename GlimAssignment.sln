@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36310.24 d17.14
+VisualStudioVersion = 17.14.36310.24
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GlimAssignment", "GlimAssignment\GlimAssignment.vcxproj", "{E90E8DC3-ABAA-35C9-142E-65C4CCBEECD7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GlimAssignment", "GlimAssignment.vcxproj", "{E90E8DC3-ABAA-35C9-142E-65C4CCBEECD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6E96F45A-3D6B-4150-A733-BE590C28F32A}
+		SolutionGuid = {9BEFEDFD-DC56-4B0F-BF8A-F0C92FD56865}
 	EndGlobalSection
 EndGlobal
