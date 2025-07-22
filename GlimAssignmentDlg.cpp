@@ -345,6 +345,7 @@ void CGlimAssignmentDlg::Draw3PointsCircle()
 
 void CGlimAssignmentDlg::PaintImage()
 {
+	std::lock_guard<std::mutex> lock(mtx);
 	InitImage();
 	Draw3PointsCircle();
 	DrawAllPoints();

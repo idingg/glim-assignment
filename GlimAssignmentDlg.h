@@ -5,7 +5,7 @@
 #pragma once
 #include <random>
 #include <ctime>
-
+#include <mutex>
 
 // CGlimAssignmentDlg 대화 상자
 class CGlimAssignmentDlg : public CDialogEx
@@ -24,6 +24,7 @@ private:
 	HANDLE m_hThread = NULL; // 스레드 핸들
 	CWinThread* m_pThread = NULL; // 스레드 객체
 	static UINT ThreadRandomMove(LPVOID pParam); // 스레드 함수
+	std::mutex mtx;
 
 	// 생성입니다.
 public:
