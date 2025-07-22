@@ -274,21 +274,27 @@ void CGlimAssignmentDlg::DrawCircle(CPoint point, int nRadius, COLORREF color, i
 		int nInnerRadius = nRadius - (nThickness / 2);
 		int nXStart = point.x - nOuterRadius;
 		int nYStart = point.y - nOuterRadius;
+		int nXEnd = point.x + nRadius + nThickness;
+		int nYEnd = point.y + nRadius + nThickness;
 
 		// 두께를 안밖으로 나눌 때 홀수값이어도 제대로 증가하도록 외부 두께를 늘림
 		if (nThickness > 1 && nThickness % 2 == 1)
 			nOuterRadius++;
 
-		// 원이 이미지 바깥까지 있는 경우 0, 0부터 시작
+		// 원이 이미지 바깥까지 있는 경우 이미지 내부로 제한
 		// 칠할 면적이 넓은 경우 계산량 줄임
 		if (point.x - nOuterRadius < 0)
 			nXStart = 0;
 		if (point.y - nOuterRadius < 0)
 			nYStart = 0;
+		if (nXEnd > m_image.GetWidth())
+			nXEnd = m_image.GetWidth();
+		if (nYEnd > m_image.GetHeight())
+			nYEnd = m_image.GetHeight();
 
-		for (int j = nYStart; j < point.y + nRadius + nThickness; j++)
+		for (int j = nYStart; j < nYEnd; j++)
 		{
-			for (int i = nXStart; i < point.x + nRadius + nThickness; i++)
+			for (int i = nXStart; i < nXEnd; i++)
 			{
 				// 현재 픽셀이 원의 경계에 있는지 확인
 				if (isInCircle(i, j, point.x, point.y, nOuterRadius)
